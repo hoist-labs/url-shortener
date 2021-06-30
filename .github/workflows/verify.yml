@@ -1,9 +1,5 @@
 name: Verify
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: [push]
 
 jobs:
   linters:
