@@ -1,77 +1,61 @@
-name: Ruby
-
+name: GitHub Actions CI
 on:
   push:
-    branches:
-    - main
-  pull_request:
-    branches:
-    - main
-
+    branches: master
+  pull_request: []
 jobs:
-  test:
-
+  tests:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        ruby-version:
-        - '3.0.1'
-        node-version:
-        - '14.16.0'
-        database-name:
-        - my-app
-        database-password:
-        - postgres
-        database-user:
-        - postgres
-        database-host:
-        - 127.0.0.1
-        database-port:
-        - 5432
-
-    services:
-      postgres:
-        image: postgres:latest
-        env:
-          POSTGRES_DB: ${{ matrix.database-name }}
-          POSTGRES_USER: ${{ matrix.database-user }}
-          POSTGRES_PASSWORD: ${{ matrix.database-password }}
-        ports:
-          - 5432:5432
-        # Set health checks to wait until postgres has started
-        options:
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     steps:
-    - name: Check out Git Repository
-      uses: actions/checkout@v2
+      - name: Set up Git repository
+        uses: actions/checkout@v1
 
-    - name: Set up Ruby, Bundler and Rails
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby-version }}
-        bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - name: Get Ruby version
+        run: echo "::set-output name=RUBY_VERSION::$(cat .ruby-version)"
+        id: ruby_version
 
-    - name: Set up Node
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "${{ steps.ruby_version.outputs.RUBY_VERSION }}"
 
-    - name: Install packages
-      run: |
-        yarn install --check-files
+      - name: Check for correct Ruby version in Gemfile.lock
+        run: git grep -o "   ruby ${{ steps.ruby_version.outputs.RUBY_VERSION }}" HEAD -- Gemfile.lock
 
-    - name: Setup test database
-      env:
-        RAILS_ENV: test
-        DATABASE_NAME_TEST: ${{ matrix.database-name }}
-        DATABASE_USER: ${{ matrix.database-user }}
-        DATABASE_PASSWORD: ${{ matrix.database-password }}
-        DATABASE_HOST: ${{ matrix.database-host }}
-        DATABASE_PORT: ${{ matrix.database-port }}
-        POSTGRES_DB: ${{ matrix.database-name }}
-      run: |
-        bundle exec rails db:migrate
+      - name: Get NodeJS version
+        run: echo "::set-output name=NODE_VERSION::$(cat .node-version)"
+        id: node_version
+
+      - name: Set up NodeJS
+        uses: actions/setup-node@v1
+        with:
+          node-version: "${{ steps.node_version.outputs.NODE_VERSION }}"
+
+      - name: Set up PostgreSQL
+        run: |
+          sudo apt-get install postgresql libpq-dev
+          sudo service postgresql start
+          sudo -u postgres createuser --superuser "$USER"
+      - name: Bootstrap
+        run: script/bootstrap
+
+      - name: Check for uncommitted NodeJS modules
+        run: |
+          git diff --stat --exit-code node_modules || {
+            echo '\n\nError: you must commit all NodeJS modules!'
+            exit 1
+          }
+          grep -qr alt-h0 node_modules || {
+            echo 'Error: Primer NodeJS modules must contain alt-h0!'
+            exit 1
+          }
+      - name: Set up Rails
+        run: script/setup
+        env:
+          RAILS_ENV: test
+
+      - name: Run tests
+        run: bundle exec rake test
+
+      - name: Run RuboCop
+        run: bundle exec rubocop
