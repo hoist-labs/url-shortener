@@ -58,13 +58,23 @@ jobs:
     strategy:
       matrix:
         ruby-version: ['3.0.1']
+        database-name:
+        - url_shortener_test
+        database-password:
+        - postgres
+        database-user:
+        - postgres
+        database-host:
+        - 127.0.0.1
+        database-port:
+        - 5432
     services:
       postgres:
         image: postgres:11
         env:
-          POSTGRES_DB: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_USER: postgres
+          POSTGRES_DB: ${{ matrix.database-name }}
+          POSTGRES_USER: ${{ matrix.database-user }}
+          POSTGRES_PASSWORD: ${{ matrix.database-password }}
         ports:
           - 5432:5432
         # Set health checks to wait until postgres has started
@@ -104,8 +114,12 @@ jobs:
       - name: Setup test database
         env:
           RAILS_ENV: test
-          PGHOST: localhost
-          PGUSER: postgres
+          DATABASE_NAME_TEST: ${{ matrix.database-name }}
+          DATABASE_USER: ${{ matrix.database-user }}
+          DATABASE_PASSWORD: ${{ matrix.database-password }}
+          DATABASE_HOST: ${{ matrix.database-host }}
+          DATABASE_PORT: ${{ matrix.database-port }}
+          POSTGRES_DB: ${{ matrix.database-name }}
         run: |
           bin/rails db:setup
 
