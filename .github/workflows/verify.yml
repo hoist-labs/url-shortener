@@ -55,6 +55,9 @@ jobs:
   tests:
     name: Tests
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby-version: ['3.0.1']
     services:
       postgres:
         image: postgres:11
