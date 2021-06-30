@@ -119,7 +119,6 @@ jobs:
           DATABASE_PASSWORD: ${{ matrix.database-password }}
           DATABASE_HOST: ${{ matrix.database-host }}
           DATABASE_PORT: ${{ matrix.database-port }}
-          POSTGRES_DB: ${{ matrix.database-name }}
         run: |
           bin/rails db:setup
 
