@@ -12,7 +12,7 @@ class CreateShortenedUrlsTable < ActiveRecord::Migration[4.2]
       t.string :unique_key, limit: 10, null: false
 
       # a category to help categorize shortened urls
-      # t.string :category
+      t.string :category
 
       # how many times the link has been clicked
       t.integer :use_count, null: false, default: 0
@@ -28,6 +28,6 @@ class CreateShortenedUrlsTable < ActiveRecord::Migration[4.2]
     add_index :shortened_urls, :unique_key, unique: true
     add_index :shortened_urls, :url, length: 2083
     # add_index :shortened_urls, [:owner_id, :owner_type]
-    # add_index :shortened_urls, :category
+    add_index :shortened_urls, :category
   end
 end

@@ -18,10 +18,12 @@ ActiveRecord::Schema.define(version: 2021_07_01_144425) do
   create_table "shortened_urls", id: :serial, force: :cascade do |t|
     t.text "url", null: false
     t.string "unique_key", limit: 10, null: false
+    t.string "category"
     t.integer "use_count", default: 0, null: false
     t.datetime "expires_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["category"], name: "index_shortened_urls_on_category"
     t.index ["unique_key"], name: "index_shortened_urls_on_unique_key", unique: true
     t.index ["url"], name: "index_shortened_urls_on_url"
   end
