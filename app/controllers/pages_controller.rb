@@ -5,7 +5,7 @@ class PagesController < ApplicationController
 
   def shorten
     @url = Shortener::ShortenedUrl.generate(params[:url])
-    redirect_to "/#{@url.unique_key}"
+    redirect_to "/result/#{@url.unique_key}"
   end
 
   def result

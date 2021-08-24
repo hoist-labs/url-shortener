@@ -8,5 +8,5 @@ Rails.application.routes.draw do
   end
 
   post "/shortener", to: "pages#shorten"
-  get  "/:id", to: "pages#result"
+  get  "/result/:id", to: "pages#result"
 end
