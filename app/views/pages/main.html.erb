@@ -1,16 +1,10 @@
-<div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-  <div class="sm:mx-auto sm:w-full sm:max-w-md">
-    <h1 class="text-center text-3xl font-extrabold text-green-900">
-      Hoist URL Shortener
-    </h1>
-  </div>
-
+<div class="min-h-screen bg-brown-50 flex flex-col justify-center px-4">
   <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
     <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-      <form class="space-y-6" action="#" method="POST">
+      <form class="space-y-6" action="/shortener" method="POST">
         <div>
           <div class="mt-1">
-            <input id="url" name="url" type="text" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm">
+            <input id="url" name="url" type="url" placeholder="https://hoistup.com" required class="appearance-none block w-full px-3 py-2 border border-brown-300 rounded-md shadow-sm placeholder-brown-900 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
           </div>
         </div>
 

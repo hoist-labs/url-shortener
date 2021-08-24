@@ -2,5 +2,11 @@
 
 Rails.application.routes.draw do
   root "pages#main"
-  get "/:id" => "shortener/shortened_urls#show"
+
+  constraints subdomain: "links" do
+    get "/:id" => "shortener/shortened_urls#show"
+  end
+
+  post "/shortener", to: "pages#shorten"
+  get  "/:id", to: "pages#result"
 end
