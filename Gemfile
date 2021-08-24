@@ -16,7 +16,6 @@ gem "puma", "~> 5.0"
 gem "redis", "4.3.1"
 gem "sass-rails", ">= 6"
 gem "shortener", "~> 0.8.2"
-gem "turbolinks", "~> 5"
 gem "webpacker", "~> 5.0"
 
 group :development, :test do

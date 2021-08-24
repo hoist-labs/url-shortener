@@ -1,0 +1,23 @@
+<div class="min-h-screen bg-brown-50 flex flex-col justify-center px-4">
+  <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+    <div
+      class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 space-y-6"
+      data-controller="clipboard"
+      data-clipboard-success-content="Copied!"
+    >
+      <div>
+        <div class="mt-1">
+          <input value='<%= "https://links.hoistup.com/#{@url.unique_key}" %>' data-clipboard-target="source" class="appearance-none block w-full px-3 py-2 border border-brown-300 rounded-md shadow-sm placeholder-brown-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+        </div>
+      </div>
+
+      <div>
+        <button type="button" data-action="clipboard#copy" data-clipboard-target="button" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+          Copy Link
+        </button>
+
+        <%= link_to "New Link", root_path, class: "mt-4 w-full flex justify-center py-2 px-4 border border-green-500 rounded-md shadow-sm text-sm font-medium text-green-500 bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" %>
+      </div>
+    </div>
+  </div>
+</div>
